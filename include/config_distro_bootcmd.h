@@ -368,6 +368,14 @@
 		"\0"                                                      \
 	\
 	"scan_dev_for_boot_part="                                         \
+		"part list ${devtype} ${devnum} -bootable test; "		\
+		"if env exists test; then "		\
+			"echo Found valid partition table; "		\
+		"else "		\
+			"echo No valid partition table, write the original partition table; "		\
+			"gpt write ${devtype} ${devnum} ${partitions}; "		\
+			"mmc rescan;"		\
+		"fi;"		\
 		"part list ${devtype} ${devnum} -bootable devplist; "     \
 		"env exists devplist || setenv devplist 1; "              \
 		"for distro_bootpart in ${devplist}; do "                 \
